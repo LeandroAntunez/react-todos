@@ -1,84 +1,85 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { TodoList } from './components/Todo/TodoList';
-import { v4 as uuidv4 } from 'uuid';
+import React from 'react';
+import TodoList from './components/Todo/TodoList';
 import './style.css';
+import Footer from './components/Footer/Footer';
 
-export function App() {
-    const [todos, setTodos] = useState([{ id: 1, task: 'Tarea 1', completed: false }])
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { todos: [], text: '' };
+        this.removeTodo = this.removeTodo.bind(this);
+        this.handleClearAll = this.handleClearAll.bind(this);
+    }
 
-    const todoTaskRef = useRef();
-
-    const KEY = "todoApp.todos";
-
-    useEffect(() => {
-        const storedTodos = JSON.parse(localStorage.getItem(KEY));
-        if (storedTodos) {
-            setTodos(storedTodos)
+    addTodo(e) {
+        e.preventDefault();
+        if (this.isTextNotEmpty()) {
+            this.setState({
+                todos: [this.state.text, ...this.state.todos],
+                text: ''
+            });
         }
-    }, []);
+    }
 
-    useEffect(() => {
-        localStorage.setItem(KEY, JSON.stringify(todos));
-    }, [todos])
+    isTextNotEmpty() {
+        return this.state.text.trim().length > 0;
+    }
 
-    const handleTodoAdd = () => {
-        const task = todoTaskRef.current.value;
-        if (task === '') return;
+    isTodosNotEmpty() {
+        return this.state.todos.length > 0;
+    }
 
-        setTodos((prevTodos) => {
-            return [...prevTodos, { id: uuidv4(), task, completed: false }]
+    removeTodo(name, i) {
+        let todos = this.state.todos.slice();
+        todos.splice(i, 1);
+        this.setState({
+            todos
         });
-
-        todoTaskRef.current.value = null;
     }
 
-    const toggleTodo = (id) => {
-        const newTodos = [...todos];
-        const todo = newTodos.find((todo) => todo.id === id);
-        todo.completed = !todo.completed;
-        setTodos(newTodos);
+    updateValue(e) {
+        this.setState({ text: e.target.value });
     }
 
-    const handleClearAll = () => {
-        const newTodos = todos.filter((todo) => !todo.completed);
-        setTodos(newTodos);
+    handleClearAll() {
+        this.setState({ todos: [] })
     }
 
-    return (
-        <div class="wrapper">
-            <header>Aplicación de Tareas</header>
-            <div className='inputField'>
-                <input type="text" placeholder='Nueva tarea' ref={todoTaskRef}></input>
-                <button onClick={handleTodoAdd}><i class='fas fa-plus'></i></button>
-            </div>
-            <ul className='todoList'>
-                <TodoList todos={todos} toggleTodo={toggleTodo} />
-                <li>Ir al gimnasio <span><i className='fas fa-trash'></i></span></li>
-                <li>Bañarse <span><i className='fas fa-trash'></i></span></li>
-                <li>Ocio <span><i className='fas fa-trash'></i></span></li>
-                <li>Dormir <span><i className='fas fa-trash'></i></span></li>
-            </ul>
-            <div className='footer'>
-                <span>Te quedan {todos.filter((todo) => !todo.completed).length} tareas por terminar.</span>
-                <button onClick={handleClearAll}>Borrar todo</button>
-            </div>
-        </div>
-    );
-}
+    handleKeyPress(e) {
+        if (e.key === 'Enter') {
+            this.addTodo(e)
+        }
+    }
 
-/*
-<>
-            <NavigationBar />
-            <p className='subtitle'>Puedes agregar tareas, y eliminar las tareas completadas</p>
-            <div className='todo'>
-                <TodoList todos={todos} toggleTodo={toggleTodo} />
-                <input className="form-control" ref={todoTaskRef} type="text" placeholder="Nueva Tarea" />
-                <div className='buttons'>
-                    <button class="btn btn-warning btn-lg" onClick={handleTodoAdd}>Agregar</button>
-                    <button class="btn btn-danger btn-lg btn-block" onClick={handleClearAll}>Eliminar</button>
+    render() {
+        return (
+            <div className='flex-wrapper'>
+                <div class="wrapper">
+                    <header>Aplicación de Tareas</header>
+                    <div className='inputField'>
+                        <input
+                            type="text"
+                            placeholder='Nueva tarea'
+                            value={this.state.text}
+                            onChange={(e) => { this.updateValue(e) }}
+                            onKeyPress={(e) => { this.handleKeyPress(e) }}
+                        >
+                        </input>
+                        <button className={this.state.text.trim().length > 0? 'active' : 'disabled'} onClick={(e) => this.addTodo(e)}>
+                            <i class='fas fa-plus'></i>
+                        </button>
+                    </div>
+                    <ul className='todoList'>
+                        <TodoList todos={this.state.todos} removeTodo={this.removeTodo} />
+                    </ul>
+                    <div className='footer'>
+                        <span>Te quedan {this.state.todos.filter((todo) => !todo.completed).length} tareas por terminar.</span>
+                        <button className={this.state.todos.length > 0 ? "active" : ""} onClick={this.handleClearAll}>Borrar todo</button>
+                    </div>
                 </div>
-                <p>Te quedan {todos.filter((todo) => !todo.completed).length} tareas por terminar.</p>
+                <Footer />
             </div>
-            <Footer />
-        </ >
-*/
+        );
+    }
+}
+export default App;

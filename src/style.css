@@ -9,80 +9,6 @@ Palette
 /*  import google fonts */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Ubuntu:wght@400;500;700&display=swap');
 
-/* General section */
-/*
-* {
-    margin: 0;
-    padding: 0;
-    text-decoration: none;
-    background: #6A2C70;
-    color: #F9ED69;
-}
-
-html,
-body {
-    background: #6A2C70;
-    height: 100%;
-    margin: 0;
-    scroll-behavior: smooth;
-}
-*/
-/* Navbar section */
-/*
-.navbar {
-    background: #F9ED69;
-}
-
-.navbar .logo{
-    background: #F9ED69;
-    color: #6A2C70;
-    margin-left: 30px;
-}
-
-.navbar .logo h1{
-    background: #F9ED69;
-    color: #6A2C70;
-    margin-left: 30px;
-}
-
-.navbar .me-auto {
-    background: #F9ED69;
-}
-
-.navbar .me-auto .link {
-    background: #F9ED69;
-}
-*/
-/* Subtitle section */
-/*
-.subtitle {
-    background: #B83B5E;
-    color: #F9ED69;
-    text-align: center;
-}
-*/
-/* Todo section */
-/*
-.todo {
-    display: flex;
-    flex-direction: column;
-    height: fit-content;
-    justify-content: center;
-    align-items: center;
-}
-
-.form-control {
-    width: 300px;
-}
-
-.todo .buttons {
-    padding: 10px ;
-}
-
-.todo .buttons button {
-    margin: 10px
-}
-*/
 * {
     margin: 0;
     padding: 0;
@@ -100,11 +26,20 @@ body {
     height: 100vh;
     /* overflow: hidden; */
     padding: 10px;
-    background: linear-gradient(to bottom, #68EACC 0%, #497BE8 100%);
+    background: linear-gradient(to bottom, #6A2C70 0%, #B83B5E 50%, #F08A5D 75%, #F9ED69 100%);
+    background-repeat: no-repeat;
+}
+
+.flex-wrapper {
+    display: flex;
+    min-height: 98vh;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .wrapper {
-    background: #fff;
+    background: #451349;
+    color: #F9ED69;
     max-width: 400px;
     width: 100%;
     margin: 40px auto;
@@ -166,6 +101,12 @@ body {
     pointer-events: auto;
 }
 
+.inputField button.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+
 .wrapper .todoList {
     max-height: 250px;
     overflow-y: auto;
@@ -175,12 +116,15 @@ body {
     position: relative;
     list-style: none;
     margin-bottom: 8px;
-    background: #f2f2f2;
+    background: #B83B5E;
     border-radius: 3px;
     padding: 10px 15px;
     cursor: default;
     overflow: hidden;
     word-wrap: break-word;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #F08A5D;
 }
 
 .todoList li .icon {
@@ -230,4 +174,20 @@ body {
 .footer button.active {
     opacity: 1;
     pointer-events: auto;
+}
+
+@media (max-height: 540px) {
+    .wrapper {
+        margin: 5px auto;
+        max-height: 400px;
+    }
+
+    .wrapper header {
+        font-size: 18px;
+        font-weight: 300;
+    }
+
+    .wrapper .todoList {
+        max-height: 125px;
+    }
 }

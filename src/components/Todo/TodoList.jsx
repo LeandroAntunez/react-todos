@@ -1,14 +1,24 @@
 import React from 'react'
-import { TodoItem } from './TodoItem';
 import './TodoList.css';
 
-export function TodoList( { todos, toggleTodo }) {
-    return (
-        <ul className='list'>
-            {todos.map((todo) => (
-                <TodoItem key={todo.id} todo ={todo} toggleTodo={toggleTodo}/>
-            ))}
-        </ul>
+class TodoList extends React.Component {
+    removeItem(item, i) {
+        this.props.removeTodo(item, i);
+    }
 
-    )
+    render() {
+        return (
+            <ul className='list'>
+                {this.props.todos.map((todo, i) => {
+                    return <li key={i}>
+                        {todo}
+                        <span className='icon' onClick={() => { this.removeItem(todo, i) }}>
+                            <i className='fas fa-trash'></i>
+                        </span>
+                    </li>
+                })}
+            </ul>
+        )
+    }
 }
+export default TodoList;
